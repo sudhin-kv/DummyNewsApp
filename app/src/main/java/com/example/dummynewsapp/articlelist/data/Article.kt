@@ -20,5 +20,5 @@ data class Article(
     val author: String,
     val category: String,
     val articleType: String,
-    val tag: String,
+    val tags: ArrayList<String>,
 )

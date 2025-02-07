@@ -53,12 +53,23 @@ class ArticleFragment : Fragment(), ArticleAdapter.OnItemClickListener {
 
         observeDate()
 
-        binding.spinnerAuthor.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        /**
+         * Sets up the item selected listener for the spinners to filter articles
+         * based on the selected author, category, type, and tag.
+         */
+        val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedAuthor = parent.getItemAtPosition(position) as String
+                val selectedAuthor = binding.spinnerAuthor.selectedItem as String
+                val selectedCategory = binding.spinnerCategory.selectedItem as String
+                val selectedType = binding.spinnerArticleType.selectedItem as String
+                val selectedTag = binding.spinnerTag.selectedItem as String
 
-                // Filter articles based on category, type, author and tag
-                viewModel.filterArticles(null,null, selectedAuthor, null)
+                viewModel.filterArticles(
+                    category = selectedCategory,
+                    type = selectedType,
+                    author = selectedAuthor,
+                    tag = selectedTag
+                )
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -66,44 +77,10 @@ class ArticleFragment : Fragment(), ArticleAdapter.OnItemClickListener {
             }
         }
 
-        binding.spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedCategory = parent.getItemAtPosition(position) as String
-
-                // Filter articles based on category, type, author and tag
-                viewModel.filterArticles(selectedCategory,null, null, null)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
-            }
-        }
-
-        binding.spinnerArticleType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedType = parent.getItemAtPosition(position) as String
-
-                // Filter articles based on category, type, author and tag
-                viewModel.filterArticles(null, selectedType, null, null)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
-            }
-        }
-
-        binding.spinnerTag.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedTag = parent.getItemAtPosition(position) as String
-
-                // Filter articles based on category, type, author and tag
-                viewModel.filterArticles(null,null, null, selectedTag)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
-            }
-        }
+        binding.spinnerAuthor.onItemSelectedListener = onItemSelectedListener
+        binding.spinnerCategory.onItemSelectedListener = onItemSelectedListener
+        binding.spinnerArticleType.onItemSelectedListener = onItemSelectedListener
+        binding.spinnerTag.onItemSelectedListener = onItemSelectedListener
     }
 
     private fun observeDate() {

@@ -13,6 +13,8 @@ import kotlinx.coroutines.launch
  */
 
 class ArticleViewModel  : ViewModel() {
+    private var allArticle = listOf<Article>()
+
     private val _articles = MutableLiveData<List<Article>?>()
     val articles: LiveData<List<Article>?> get() = _articles
 
@@ -91,9 +93,9 @@ class ArticleViewModel  : ViewModel() {
                 "Subtitle 1",
                 "https://www.freecodecamp.org/news/content/images/size/w2000/2023/06/Screenshot-2023-06-14-at-12.42.04-PM.png",
                 "Author 1",
-                "Category 1",
-                "Article Type 1",
-                "Tag 1"
+                "Science",
+                "Type 1",
+                ArrayList(listOf("Technology", "Science"))
             ),
             Article(
                 "b2n2ss92",
@@ -101,25 +103,27 @@ class ArticleViewModel  : ViewModel() {
                 "Subtitle 2",
                 "https://www.bigdatawire.com/wp-content/uploads/2024/05/AI-copilot_shutterstock_AI-generated.jpg",
                 "Author 2",
-                "Category 2",
-                "Article Type 2",
-                "Tag 2"
+                "Technology",
+                "Type 2",
+                ArrayList(listOf("Science"))
             )
         )
+
+        allArticle = _articles.value!!
     }
 
     // Filter articles based on category, type, author and tag
     fun filterArticles(
-        category: String? = null,
-        type: String? = null,
-        author: String? = null,
-        tag: String? = null
+        category: String? = "Select Category",
+        type: String? = "Select Type",
+        author: String? = "Select Author",
+        tag: String? = "Select Tag"
     ) {
-        val filteredArticles = _articles.value?.filter { article ->
+        val filteredArticles = allArticle.filter { article ->
             (category == null || category == "Select Category" || article.category == category) &&
                     (type == null || type == "Select Type" || article.articleType == type) &&
-                    (author == null || author == "Select Author" ||article.author == author) &&
-                    (tag == null || tag == "Select Tag" || article.tag.contains(tag))
+                    (author == null || author == "Select Author" || article.author == author) &&
+                    (tag == null || tag == "Select Tag" || article.tags.contains(tag))
         }
         _articles.value = filteredArticles
     }
