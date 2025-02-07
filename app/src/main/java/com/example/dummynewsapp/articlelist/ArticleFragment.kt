@@ -87,6 +87,7 @@ class ArticleFragment : Fragment(), ArticleAdapter.OnItemClickListener {
         viewModel.articles.observe(viewLifecycleOwner) { articles ->
             if (articles != null) {
                 articleAdapter.updateArticles(articles)
+                viewModel.checkIfArticlesEmpty()
             }
         }
     }
@@ -105,7 +106,7 @@ class ArticleFragment : Fragment(), ArticleAdapter.OnItemClickListener {
  */
     override fun onItemClick(article: Article) {
         //navigate to the second fragment
-        val action = ArticleFragmentDirections.actionArticleFragmentToDetailsFragment()
+        val action = ArticleFragmentDirections.actionArticleFragmentToDetailsFragment(articleId = article.id)
         findNavController().navigate(action)
     }
 }

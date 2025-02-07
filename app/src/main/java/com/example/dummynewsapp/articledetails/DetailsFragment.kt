@@ -28,8 +28,8 @@ class DetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
 
     }
@@ -37,6 +37,18 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Retrieve the article ID from the fragment arguments
+        val articleId = arguments?.getString("articleId")
+
+        // Check if the article ID is not null and fetch article details
+        if (articleId != null) {
+            viewModel.fetchArticleDetails(articleId)
+        }
+        observe()
+    }
+
+    // Observe the LiveData
+    private fun observe() {
         viewModel.articleDetails.observe(viewLifecycleOwner) { articles ->
             if (articles != null) {
                 binding.articleDetails = articles

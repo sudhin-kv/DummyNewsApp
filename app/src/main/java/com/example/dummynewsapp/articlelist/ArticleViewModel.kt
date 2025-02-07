@@ -30,6 +30,9 @@ class ArticleViewModel  : ViewModel() {
     private val _tags = MutableLiveData<List<Categories>>()
     val tags: LiveData<List<Categories>> get() = _tags
 
+    private val _isEmpty = MutableLiveData<Boolean>()
+    val isEmpty: LiveData<Boolean> get() = _isEmpty
+
     // Initialize the articles list
     init {
         // Fetch articles from a data source
@@ -80,36 +83,43 @@ class ArticleViewModel  : ViewModel() {
         }
     }
 
+    //assign boolean value to livedata _isEmpty based on the articles list
+    fun checkIfArticlesEmpty() {
+        _isEmpty.value = _articles.value.isNullOrEmpty()
+    }
+
     /**
      * Fetches articles from a data source and updates the LiveData.
      * */
-    private fun fetchArticles() {
-        // Load articles from a data source
-        _articles.value = listOf(
-            // Example articles
-            Article(
-                "a2b448sq",
-                "GitHub Copilot - About, Features and Use Cases",
-                "Subtitle 1",
-                "https://www.freecodecamp.org/news/content/images/size/w2000/2023/06/Screenshot-2023-06-14-at-12.42.04-PM.png",
-                "Author 1",
-                "Science",
-                "Type 1",
-                ArrayList(listOf("Technology", "Science"))
-            ),
-            Article(
-                "b2n2ss92",
-                "Has Codeium Cracked the Code for AI Assistants?",
-                "Subtitle 2",
-                "https://www.bigdatawire.com/wp-content/uploads/2024/05/AI-copilot_shutterstock_AI-generated.jpg",
-                "Author 2",
-                "Technology",
-                "Type 2",
-                ArrayList(listOf("Science"))
+    private fun  fetchArticles() {
+        viewModelScope.launch {
+            // Load articles from a data source
+            _articles.value = listOf(
+                // Example articles
+                Article(
+                    "a2b448sq",
+                    "GitHub Copilot - About, Features and Use Cases",
+                    "Quantifying GitHub Copilot’s impact on developer productivity and happiness",
+                    "https://www.freecodecamp.org/news/content/images/size/w2000/2023/06/Screenshot-2023-06-14-at-12.42.04-PM.png",
+                    "Author 1",
+                    "Science",
+                    "Type 1",
+                    ArrayList(listOf("Technology", "Science", "Gen AI", "Copilot"))
+                ),
+                Article(
+                    "b2n2ss92",
+                    "Has Codeium Cracked the Code for AI Assistants?",
+                    "Quantifying GitHub Copilot’s impact on developer productivity and happiness",
+                    "https://www.bigdatawire.com/wp-content/uploads/2024/05/AI-copilot_shutterstock_AI-generated.jpg",
+                    "Author 2",
+                    "Technology",
+                    "Type 2",
+                    ArrayList(listOf("Science"))
+                )
             )
-        )
 
-        allArticle = _articles.value!!
+            allArticle = _articles.value!!
+        }
     }
 
     // Filter articles based on category, type, author and tag
